@@ -1,0 +1,94 @@
+services:
+  # Scout Mini ROS 2 Jazzy service for Jetson Orin
+  scout-mini:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: scout-mini-ros2:latest
+    container_name: scout-mini-jetson
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.docker.xauth
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+      # ROS 2 configuration
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+      - ROS_LOCALHOST_ONLY=0
+      # Fix FastRTPS shared memory issues in Docker
+      - FASTRTPS_DEFAULT_PROFILES_FILE=/dev/null
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ../:/workspace:rw
+      # Add shared memory for better performance
+      - /dev/shm:/dev/shm
+    network_mode: host
+    stdin_open: true
+    tty: true
+    privileged: true
+    runtime: nvidia
+    # Add IPC for shared memory
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    working_dir: /workspace
+    command: /bin/bash
+
+  # Scout Launch Service - Automatically starts scout-bringup
+  scout-launch:
+    image: scout-mini-ros2:latest
+    container_name: scout-launch-service
+    depends_on:
+      - scout-mini
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.docker.xauth
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+      # ROS 2 configuration
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+      - ROS_LOCALHOST_ONLY=0
+      # Fix FastRTPS shared memory issues in Docker
+      - FASTRTPS_DEFAULT_PROFILES_FILE=/dev/null
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ../:/workspace:rw
+      # Add shared memory for better performance
+      - /dev/shm:/dev/shm
+    network_mode: host
+    stdin_open: true
+    tty: true
+    privileged: true
+    runtime: nvidia
+    # Add IPC for shared memory
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    working_dir: /workspace
+    command: >
+      bash -c "
+        echo 'Setting up CAN interface...' &&
+        sudo ip link set can0 down 2>/dev/null || true &&
+        sudo ip link set can0 up type can bitrate 500000 2>/dev/null || echo 'CAN setup may require host privileges' &&
+        cd /workspace/scout_ws &&
+        source /opt/ros/jazzy/setup.bash &&
+        source install/setup.bash &&
+        ros2 launch scout_bringup start_scout.launch.py
+      "

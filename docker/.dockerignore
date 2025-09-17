@@ -1,0 +1,44 @@
+# Git directories and files
+.git
+.gitignore
+.gitmodules
+
+# Documentation
+README.md
+*.md
+doc/
+docs/
+
+# Build artifacts
+build/
+install/
+log/
+.colcon_install_layout
+.colcon_build_layout
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Docker files (don't copy docker folder into itself)
+docker/
+
+# Only copy specific packages we need
+# Everything else will be excluded by default 

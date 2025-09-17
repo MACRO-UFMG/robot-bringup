@@ -1,0 +1,31 @@
+[submodule "scout_ws/src/livox_ros_driver2"]
+	path = scout_ws/src/livox_ros_driver2
+	url = git@github.com:UFMG-Petrobras-OP-1319/livox_ros_driver2.git
+[submodule "scout_ws/src/Livox-SDK2"]
+	path = scout_ws/src/Livox-SDK2
+	url = git@github.com:UFMG-Petrobras-OP-1319/Livox-SDK2.git
+[submodule "scout_ws/src/scout-bringup"]
+	path = scout_ws/src/scout-bringup
+	url = git@github.com:UFMG-Petrobras-OP-1319/scout-bringup.git
+[submodule "scout_ws/src/scout_ros2"]
+	path = scout_ws/src/scout_ros2
+	url = git@github.com:agilexrobotics/scout_ros2.git
+[submodule "scout_ws/src/ugv_sdk"]
+	path = scout_ws/src/ugv_sdk
+	url = git@github.com:agilexrobotics/ugv_sdk.git
+[submodule "scout_ws/src/pointcloud_to_laserscan"]
+	path = scout_ws/src/pointcloud_to_laserscan
+	url = git@github.com:MACRO-UFMG/pointcloud_to_laserscan.git
+[submodule "scout_ws/src/FAST_LIO_ROS2"]
+	path = scout_ws/src/FAST_LIO_ROS2
+	url = git@github.com:MACRO-UFMG/FAST_LIO_ROS2.git
+[submodule "scout_ws/src/librealsense"]
+	path = scout_ws/src/librealsense
+	url = https://github.com/IntelRealSense/librealsense.git
+[submodule "scout_ws/src/realsense-ros"]
+	path = scout_ws/src/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
+	branch = ros2-development
+[submodule "scout_ws/src/mocap_optitrack"]
+	path = scout_ws/src/mocap_optitrack
+	url = https://github.com/Gerjen100/mocap_optitrack.git
