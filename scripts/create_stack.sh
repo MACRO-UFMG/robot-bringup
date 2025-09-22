@@ -63,6 +63,7 @@ PACKAGES=$(whiptail --title "Additional Packages" --checklist \
 "nav2"         "$(pad "Navigation2 (Nav2)")" OFF \
 "slam"         "$(pad "SLAM")" OFF \
 "localization" "$(pad "Localization")" OFF \
+"fastlio2"     "$(pad "FAST-LIO2 Mapping")" OFF \
 3>&1 1>&2 2>&3)
 
 if [ $? -ne 0 ]; then
