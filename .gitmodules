@@ -29,3 +29,6 @@
 [submodule "src/pionner_bringup/src/rosaria2"]
 	path = src/pionner_bringup/src/rosaria2
 	url = https://github.com/MACRO-UFMG/rosaria2.git
+[submodule "src/fastlio2_bringup/src/FAST_LIO_ROS2"]
+	path = src/fastlio2_bringup/src/FAST_LIO_ROS2
+	url = https://github.com/MACRO-UFMG/FAST_LIO_ROS2.git
