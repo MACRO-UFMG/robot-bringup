@@ -29,3 +29,9 @@
 [submodule "scout_ws/src/mocap_optitrack"]
 	path = scout_ws/src/mocap_optitrack
 	url = https://github.com/Gerjen100/mocap_optitrack.git
+[submodule "src/pionner_bringup/src/AriaCoda"]
+	path = src/pionner_bringup/src/AriaCoda
+	url = https://github.com/MACRO-UFMG/AriaCoda.git
+[submodule "src/pionner_bringup/src/rosaria2"]
+	path = src/pionner_bringup/src/rosaria2
+	url = https://github.com/MACRO-UFMG/rosaria2.git
