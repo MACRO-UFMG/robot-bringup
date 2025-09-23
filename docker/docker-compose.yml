@@ -8,11 +8,8 @@ services:
     tty: true
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
-    environment:
-      ROS_DOMAIN_ID: 11
-      ROS_IP: 192.168.3.1
-      ROS_HOSTNAME: 192.168.3.1
-      ROS_AUTOMATIC_DISCOVERY_RANGE: SYSTEM_DEFAULT
+    env_file:
+      - ./bringup.env
 
   realsense2_camera_bringup:
     build: ../src/realsense2_camera_bringup
@@ -23,11 +20,8 @@ services:
     tty: true
     devices:
       - "/dev:/dev"
-    environment:
-      ROS_DOMAIN_ID: 11
-      ROS_IP: 192.168.3.1
-      ROS_HOSTNAME: 192.168.3.1
-      ROS_AUTOMATIC_DISCOVERY_RANGE: SYSTEM_DEFAULT
+    env_file:
+      - ./bringup.env
 
   livox_bringup:
     build: ../src/livox_bringup
@@ -38,11 +32,8 @@ services:
     tty: true
     devices:
       - "/dev:/dev"
-    environment:
-      ROS_DOMAIN_ID: 11
-      ROS_IP: 192.168.3.1
-      ROS_HOSTNAME: 192.168.3.1
-      ROS_AUTOMATIC_DISCOVERY_RANGE: SYSTEM_DEFAULT
+    env_file:
+      - ./bringup.env
 
   fastlio2_bringup:
     build: ../src/fastlio2_bringup
@@ -53,9 +44,7 @@ services:
     tty: true
     devices:
       - "/dev:/dev"
+    env_file:
+      - ./bringup.env
     environment:
-      ROS_DOMAIN_ID: 11
-      ROS_IP: 192.168.3.1
-      ROS_HOSTNAME: 192.168.3.1
-      ROS_AUTOMATIC_DISCOVERY_RANGE: SYSTEM_DEFAULT
       CONFIG_FILE: "avia.yaml"
