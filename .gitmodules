@@ -7,3 +7,11 @@
 [submodule "src/fastlio2_bringup/src/FAST_LIO_ROS2"]
 	path = src/fastlio2_bringup/src/FAST_LIO_ROS2
 	url = https://github.com/MACRO-UFMG/FAST_LIO_ROS2.git
+
+[submodule "src/livox_bringup/src/livox_ros_driver2"]
+	path = src/livox_bringup/src/livox_ros_driver2
+	url = https://github.com/UFMG-Petrobras-OP-1319/livox_ros_driver2.git
+	branch = jazzy
+[submodule "src/livox_bringup/src/Livox-SDK2"]
+	path = src/livox_bringup/src/Livox-SDK2
+	url = https://github.com/UFMG-Petrobras-OP-1319/Livox-SDK2.git
