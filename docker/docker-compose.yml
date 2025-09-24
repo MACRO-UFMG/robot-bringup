@@ -30,10 +30,17 @@ services:
     command: /bin/bash
     privileged: true
     tty: true
+    stdin_open: true
+    ipc: host
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - /dev/shm:/dev/shm
     devices:
       - "/dev:/dev"
     env_file:
       - ./bringup.env
+
 
   fastlio2_bringup:
     build: ../src/fastlio2_bringup
