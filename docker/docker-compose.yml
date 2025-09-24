@@ -48,3 +48,15 @@ services:
       - ./bringup.env
     environment:
       CONFIG_FILE: "avia.yaml"
+
+  nav2_bringup:
+    build: ../src/nav2_bringup
+    profiles: ["nav2"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ./bringup.env
