@@ -48,6 +48,17 @@ RUN chmod +x /entrypoint.sh
 
 COPY ./config_template.json /tmp/config_template.json
 
+# Create a script to copy the generated config to the expected location
+RUN echo '#!/bin/bash\n\
+# Copy generated config to the location expected by the launch files\n\
+if [ -f "/home/ros/ros2_ws/src/livox_ros_driver2/config/MID360_config.json" ]; then\n\
+    cp "/home/ros/ros2_ws/src/livox_ros_driver2/config/MID360_config.json" "/home/ros/ros2_ws/install/livox_ros_driver2/share/livox_ros_driver2/config/MID360_config.json"\n\
+    echo "✅ Config file copied to install directory"\n\
+else\n\
+    echo "❌ Generated config file not found!"\n\
+fi\n\
+exec "$@"' > /copy_config.sh && chmod +x /copy_config.sh
+
 # Set entrypoint
 ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
 
