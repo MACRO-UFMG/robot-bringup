@@ -17,11 +17,6 @@ RUN cmake .. && \
     make -j$(nproc) && \
     make install
 
-# Build livox_ros_driver2
-WORKDIR /home/ros/ros2_ws/src/livox_ros_driver2
-RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && ./build.sh ROS2"
-
-
 # Build workspace
 WORKDIR /home/ros/ros2_ws
 RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
@@ -30,8 +25,10 @@ RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-ins
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY ./config_template.json /tmp/config_template.json
+
 # Set entrypoint
-# ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
 
 # Default command
 CMD ["/bin/bash"]
