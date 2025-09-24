@@ -25,6 +25,9 @@ sed -i "s/LIDAR_IP_PLACEHOLDER/$LIVOX_LIDAR_IP/g" "$OUTPUT"
 echo "✅ Arquivo de configuração gerado em $OUTPUT:"
 # cat "$OUTPUT"
 
+# Configure library path
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 # Source ROS
 source /opt/ros/jazzy/setup.bash
 source /home/ros/ros2_ws/install/setup.bash

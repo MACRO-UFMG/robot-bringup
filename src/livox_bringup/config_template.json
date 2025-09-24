@@ -25,7 +25,6 @@
   },
   "lidar_configs": [
     {
-      "broadcast_code": "BROADCAST_CODE_PLACEHOLDER",
       "ip": "LIDAR_IP_PLACEHOLDER",
       "pcl_data_type": 1,
       "pattern_mode": 0,
