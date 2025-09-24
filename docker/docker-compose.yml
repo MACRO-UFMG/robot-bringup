@@ -24,7 +24,10 @@ services:
       - ./bringup.env
 
   livox_bringup:
-    build: ../src/livox_bringup
+    build: 
+      context: ../src/livox_bringup
+      tags:
+        - livox_bringup:latest
     profiles: ["livox"]
     network_mode: host
     command: /bin/bash
@@ -42,7 +45,9 @@ services:
       - ./bringup.env
 
   fastlio2_bringup:
-    build: ../src/fastlio2_bringup
+    build: 
+      context: ../src/fastlio2_bringup
+      dockerfile: Dockerfile
     profiles: ["fastlio2"]
     network_mode: host
     command: /bin/bash
@@ -53,7 +58,7 @@ services:
     env_file:
       - ./bringup.env
     environment:
-      CONFIG_FILE: "avia.yaml"
+      CONFIG_FILE: "mid360.yaml"
 
   nav2_bringup:
     build: ../src/nav2_bringup

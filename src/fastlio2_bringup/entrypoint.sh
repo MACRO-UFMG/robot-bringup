@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Inherit from livox_bringup entrypoint
+# Configure library path (inherited from livox_bringup)
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 # Source ROS 2 environment
 source /opt/ros/jazzy/setup.bash
 
@@ -11,7 +15,17 @@ if [ -f "/home/${USERNAME}/ros2_ws/install/setup.bash" ]; then
 fi
 
 # Set default configuration file if not provided
-CONFIG_FILE=${CONFIG_FILE:-"avia.yaml"}
+CONFIG_FILE=${CONFIG_FILE:-"mid360.yaml"}
 
-# Launch FASTLIO2 mapping
-exec ros2 launch fast_lio mapping.launch.py config_file:=${CONFIG_FILE}
+echo "🚀 FastLIO2 SLAM Ready!"
+echo "📋 Available config files:"
+ls -la /home/${USERNAME}/ros2_ws/src/FAST_LIO_ROS2/config/ || echo "No config directory found"
+echo ""
+echo "💻 To start SLAM, run:"
+echo "  ros2 launch fast_lio mapping.launch.py config_file:=${CONFIG_FILE}"
+echo "  ros2 launch fast_lio mapping.launch.py config_file:=avia.yaml"
+echo "  ros2 launch fast_lio mapping.launch.py config_file:=velodyne.yaml"
+echo ""
+
+# Execute the command passed (ex: /bin/bash)
+exec "$@"

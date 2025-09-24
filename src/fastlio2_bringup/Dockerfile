@@ -1,4 +1,4 @@
-FROM ros2_jazzy:latest
+FROM livox_bringup:latest
 
 # Define USERNAME variable
 ARG USERNAME=ros
@@ -7,45 +7,44 @@ ENV USERNAME=${USERNAME}
 # Set working directory
 WORKDIR /home/${USERNAME}/ros2_ws
 
-# Install FASTLIO2 dependencies
+# Install additional FASTLIO2 dependencies
 RUN apt-get update && \
     apt-get install -y \
-        # PCL and related packages
-        libpcl-dev \
-        ros-jazzy-pcl-* \
-        # Eigen3
+        # Eigen3 for FastLIO
         libeigen3-dev \
-        # Build tools
-        python3-colcon-common-extensions \
-        # Additional dependencies
+        # Additional ROS2 packages for SLAM
         ros-jazzy-tf2-geometry-msgs \
         ros-jazzy-geometry-msgs \
-        ros-jazzy-sensor-msgs \
         ros-jazzy-nav-msgs \
-        ros-jazzy-std-msgs \
         ros-jazzy-visualization-msgs \
-        # Livox dependencies
-        ros-jazzy-livox-ros-driver2 \
+        ros-jazzy-rviz2 \
+        # Build tools
+        python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy FAST_LIO_ROS2 sources into the ROS2 workspace
 WORKDIR /home/${USERNAME}/ros2_ws/src
 COPY ./src/FAST_LIO_ROS2 ./FAST_LIO_ROS2
 
-# Install additional ROS2 dependencies
-RUN rosdep update && \
-    rosdep install --from-paths . --ignore-src -r -y
-
-# Build FAST_LIO_ROS2 separately
+# Build FAST_LIO_ROS2 (depends on livox_ros_driver2)
 RUN /bin/bash -c "cd /home/${USERNAME}/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
-    colcon build --packages-select FAST_LIO_ROS2 --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev"
+    source install/setup.bash && \
+    colcon build --packages-select FAST_LIO_ROS2 \
+    --cmake-args \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_FLAGS='-Wno-dev' \
+    --no-warn-unused-cli"
 
 # Build fast_lio package
 RUN /bin/bash -c "cd /home/${USERNAME}/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
     source install/setup.bash && \
-    colcon build --packages-select fast_lio --cmake-args -DCMAKE_BUILD_TYPE=Release"
+    colcon build --packages-select fast_lio \
+    --cmake-args \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_FLAGS='-Wno-dev' \
+    --no-warn-unused-cli"
 
 # Copy entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
