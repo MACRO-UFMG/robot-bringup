@@ -27,7 +27,6 @@ RUN rm -rf build && mkdir build && \
 
 # Build workspace
 WORKDIR /home/ros/ros2_ws
-# RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
 
 
 # Verify Livox SDK installation and build livox_ros_driver2
