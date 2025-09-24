@@ -41,7 +41,6 @@ services:
     env_file:
       - ./bringup.env
 
-
   fastlio2_bringup:
     build: ../src/fastlio2_bringup
     profiles: ["fastlio2"]

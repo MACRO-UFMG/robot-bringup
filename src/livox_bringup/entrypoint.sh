@@ -46,5 +46,6 @@ source /home/ros/ros2_ws/install/setup.bash
 # Copy config to install directory
 /copy_config.sh
 
-# Executa o comando passado (ex: /bin/bash)
-exec "$@"
+# Always launch the Livox ROS2 driver
+echo "🚀 Launching Livox ROS2 driver with RViz..."
+exec ros2 launch livox_ros_driver2 rviz_MID360_launch.py
