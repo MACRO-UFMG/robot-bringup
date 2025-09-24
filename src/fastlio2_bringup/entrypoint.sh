@@ -21,11 +21,8 @@ echo "🚀 FastLIO2 SLAM Ready!"
 echo "📋 Available config files:"
 ls -la /home/${USERNAME}/ros2_ws/src/FAST_LIO_ROS2/config/ || echo "No config directory found"
 echo ""
-echo "💻 To start SLAM, run:"
-echo "  ros2 launch fast_lio mapping.launch.py config_file:=${CONFIG_FILE}"
-echo "  ros2 launch fast_lio mapping.launch.py config_file:=avia.yaml"
-echo "  ros2 launch fast_lio mapping.launch.py config_file:=velodyne.yaml"
+echo "🎯 Starting FastLIO2 SLAM with config: ${CONFIG_FILE}"
 echo ""
 
-# Execute the command passed (ex: /bin/bash)
-exec "$@"
+# Launch FastLIO2 SLAM
+exec ros2 launch fast_lio mapping.launch.py config_file:=${CONFIG_FILE}
