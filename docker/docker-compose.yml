@@ -75,3 +75,24 @@ services:
       - "/dev:/dev"
     env_file:
       - ./bringup.env
+
+  pointcloud_to_laserscan_bringup:
+    build: 
+      context: ../src/pointcloud_to_laserscan_bringup
+      dockerfile: Dockerfile
+    profiles: ["pointcloud_to_laserscan"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ./bringup.env
+    environment:
+      INPUT_CLOUD_TOPIC: "/cloud_registered"
+      OUTPUT_SCAN_TOPIC: "/scan"
+      MIN_HEIGHT: "-2.0"
+      MAX_HEIGHT: "2.0"
