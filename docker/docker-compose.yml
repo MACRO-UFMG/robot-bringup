@@ -6,6 +6,7 @@ services:
     command: /bin/bash
     privileged: true
     tty: true
+    ipc: host
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     env_file:
@@ -18,6 +19,7 @@ services:
     command: /bin/bash
     privileged: true
     tty: true
+    ipc: host
     devices:
       - "/dev:/dev"
     env_file:
@@ -53,12 +55,13 @@ services:
     command: /bin/bash
     privileged: true
     tty: true
+    ipc: host
     devices:
       - "/dev:/dev"
     env_file:
       - ./bringup.env
     environment:
-      CONFIG_FILE: "mid360.yaml"
+      CONFIG_FILE: "mid360_mod.yaml"
 
   nav2_bringup:
     build: ../src/nav2_bringup
@@ -67,6 +70,7 @@ services:
     command: /bin/bash
     privileged: true
     tty: true
+    ipc: host
     devices:
       - "/dev:/dev"
     env_file:
