@@ -10,5 +10,11 @@ if [ -f "/home/${USERNAME}/ros2_ws/install/setup.bash" ]; then
     source /home/${USERNAME}/ros2_ws/install/setup.bash
 fi
 
-# Launch FASTLIO2 mapping
-ros2 launch nav2_bringup localization_launch.py   # params_file:=/home/ros/ros2_ws/src/scout-bringup/scout_bringup/config/nav2_test.yaml   map:=/home/ros/ros2_ws/src/maps/2d/quarter_map.yaml
+# Launch Nav2 mapping
+ros2 launch nav2_bringup slam_launch.py params_file:=/home/${USERNAME}/ros2_ws/src/nav2_params.yaml use_sim_time:=false
+ # params_file:=/home/ros/ros2_ws/src/scout-bringup/scout_bringup/config/nav2_test.yaml   map:=/home/ros/ros2_ws/src/maps/2d/quarter_map.yaml
+
+
+
+ # Favor nao apagar
+ 

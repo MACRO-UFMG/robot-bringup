@@ -25,6 +25,19 @@ services:
     env_file:
       - ./bringup.env
 
+  ros_bringup:
+    build: ../src/ros_bringup
+    profiles: ["ros_base"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ./bringup.env
+
   livox_bringup:
     build: 
       context: ../src/livox_bringup
