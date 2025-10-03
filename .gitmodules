@@ -7,7 +7,6 @@
 [submodule "src/fastlio2_bringup/src/FAST_LIO_ROS2"]
 	path = src/fastlio2_bringup/src/FAST_LIO_ROS2
 	url = https://github.com/MACRO-UFMG/FAST_LIO_ROS2.git
-
 [submodule "src/livox_bringup/src/livox_ros_driver2"]
 	path = src/livox_bringup/src/livox_ros_driver2
 	url = https://github.com/UFMG-Petrobras-OP-1319/livox_ros_driver2.git
@@ -15,8 +14,14 @@
 [submodule "src/livox_bringup/src/Livox-SDK2"]
 	path = src/livox_bringup/src/Livox-SDK2
 	url = https://github.com/UFMG-Petrobras-OP-1319/Livox-SDK2.git
-
 [submodule "src/pointcloud_to_laserscan_bringup/src/pointcloud_to_laserscan"]
 	path = src/pointcloud_to_laserscan_bringup/src/pointcloud_to_laserscan
 	url = https://github.com/MACRO-UFMG/pointcloud_to_laserscan.git
 	branch = jazzy
+[submodule "src/scout_bringup/src/scout_ros2"]
+	path = src/scout_bringup/src/scout_ros2
+	url = https://github.com/agilexrobotics/scout_ros2.git
+	branch = origin/jazzy
+[submodule "src/scout_bringup/src/ugv_sdk"]
+	path = src/scout_bringup/src/ugv_sdk
+	url = https://github.com/agilexrobotics/ugv_sdk.git

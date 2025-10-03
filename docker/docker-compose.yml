@@ -12,6 +12,19 @@ services:
     env_file:
       - ./bringup.env
 
+  scout_bringup:
+    build: ../src/scout_bringup
+    profiles: ["scout"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    env_file:
+      - ./bringup.env
+
   realsense2_camera_bringup:
     build: ../src/realsense2_camera_bringup
     profiles: ["realsense2"]
