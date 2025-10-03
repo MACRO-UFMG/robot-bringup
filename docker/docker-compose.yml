@@ -26,7 +26,7 @@ services:
       - ./bringup.env
 
   ros_bringup:
-    build: ../src/ros_bringup
+    build: ../src/robot_bringup
     profiles: ["ros_base"]
     network_mode: host
     command: /bin/bash

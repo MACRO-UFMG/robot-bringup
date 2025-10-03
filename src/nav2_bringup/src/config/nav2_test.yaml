@@ -39,7 +39,7 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: "scan"   # topic name only; remap uses /scan
+    scan_topic: "livox/scan"   # topic name only; remap uses /scan
 
 bt_navigator:
   ros__parameters:
@@ -198,7 +198,7 @@ local_costmap:
 
         # Per-source tuning (kills “ghost blobs” fast)
         scan:
-          topic: /scan
+          topic: /livox/scan
           data_type: "LaserScan"
           marking: True
           clearing: True
@@ -377,7 +377,7 @@ collision_monitor:
     observation_sources: ["scan"]
     scan:
       type: "scan"
-      topic: "scan"
+      topic: "livox/scan"
       min_height: 0.15
       max_height: 2.0
       enabled: True

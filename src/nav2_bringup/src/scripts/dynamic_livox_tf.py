@@ -13,72 +13,110 @@ class TfPublisher(Node):
     def __init__(self):
         super().__init__('tf_publisher')
 
-        # broadcaster para todos os transforms
+        # single broadcaster for all dynamic transforms
         self.broadcaster = TransformBroadcaster(self)
-
-        # publisher de odometria re-publicada (opcional para Nav2)
+        
+        # <<< INÍCIO DA MODIFICAÇÃO >>>
+        # create a publisher for the re-stamped odometry
         self.odom_publisher = self.create_publisher(
             Odometry,
-            'fast_lio/odom',  # Nav2 normalmente espera /odom
+            '/scout/odom',          # new topic name
             10
         )
+        # <<< FIM DA MODIFICAÇÃO >>>
 
-        # subscribe à odometria do Pioneer
+        # subscribe to your odometry source
         self.create_subscription(
             Odometry,
-            '/Odometry',  # tópico que você informou
+            '/Odometry',          # use your actual topic name
             self.odom_callback,
             10
         )
 
-        # publicador de LiDAR Livox a 20 Hz
+        # publish the LiDAR offset at 20 Hz
         self.create_timer(0.05, self.publish_livox_tf)
 
         self.get_logger().info(
-            "TF publisher rodando: odom->base_link & base_link->livox_frame"
+            "TF publisher running: publishing odom→base_link & base_link→livox_frame"
         )
 
     def odom_callback(self, msg: Odometry):
         """
-        Transforma odometria do Pioneer em odom->base_link
-        e república a odometria com timestamp atualizado
+        Broadcast odom → base_link from each incoming Odometry
+        and republish the odometry with an updated timestamp.
         """
-        # timestamp atual
+        # <<< INÍCIO DA MODIFICAÇÃO >>>
+        # Get the current time once to ensure consistency
         current_time = self.get_clock().now().to_msg()
+        # <<< FIM DA MODIFICAÇÃO >>>
 
-        # Transform odom -> base_link
+        # debug log so you can verify it's firing
+        self.get_logger().debug(
+            f"Got Odometry @ {msg.header.stamp.sec}.{msg.header.stamp.nanosec}"
+        )
+
         t = TransformStamped()
-        t.header.stamp = current_time
+        t.header.stamp = current_time # Use current time
         t.header.frame_id = 'fast_lio/odom'
         t.child_frame_id = 'fast_lio/base_link'
 
+        # pass through position
         t.transform.translation.x = msg.pose.pose.position.x
         t.transform.translation.y = msg.pose.pose.position.y
         t.transform.translation.z = msg.pose.pose.position.z
+
+        # pass through orientation
         t.transform.rotation = msg.pose.pose.orientation
 
         self.broadcaster.sendTransform(t)
-
-        # republika odometria para Nav2
+        
+        # <<< INÍCIO DA MODIFICAÇÃO >>>
+        # Update the timestamp of the original odometry message
         msg.header.stamp = current_time
-        msg.header.frame_id = 'fast_lio/odom'
+        
+        # Publish the message on the new topic
         self.odom_publisher.publish(msg)
+        # <<< FIM DA MODIFICAÇÃO >>>
+
+
+    # def odom_callback(self, msg: Odometry):
+    #     """Broadcast odom → base_link from each incoming Odometry."""
+    #     # debug log so you can verify it's firing
+    #     self.get_logger().debug(
+    #         f"Got Odometry @ {msg.header.stamp.sec}.{msg.header.stamp.nanosec}"
+    #     )
+
+    #     t = TransformStamped()
+    #     t.header.stamp = msg.header.stamp
+    #     t.header.frame_id = 'body'
+    #     t.child_frame_id = 'livox_frame'
+
+    #     # your LiDAR offset relative to the robot base
+    #     t.transform.translation.x = 0.2
+    #     t.transform.translation.y = 0.0
+    #     t.transform.translation.z = 0.15
+
+    #     # identity rotation
+    #     t.transform.rotation.x = 0.0
+    #     t.transform.rotation.y = 0.0
+    #     t.transform.rotation.z = 0.0
+    #     t.transform.rotation.w = 1.0 
+
+    #     self.broadcaster.sendTransform(t)
 
     def publish_livox_tf(self):
-        """
-        Publica base_link -> livox_frame
-        """
+        """Broadcast base_link → livox_frame at a fixed, static offset."""
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg()
         t.header.frame_id = 'fast_lio/base_link'
         t.child_frame_id = 'livox_frame'
 
-        # offset do LiDAR
+        # your LiDAR offset relative to the robot base
         t.transform.translation.x = 0.2
         t.transform.translation.y = 0.0
         t.transform.translation.z = 0.15
 
-        # rotação identidade
+        # identity rotation
         t.transform.rotation.x = 0.0
         t.transform.rotation.y = 0.0
         t.transform.rotation.z = 0.0
