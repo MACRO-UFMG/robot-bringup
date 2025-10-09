@@ -25,4 +25,6 @@ echo "🎯 Starting FastLIO2 SLAM with config: ${CONFIG_FILE}"
 echo ""
 
 # Launch FastLIO2 SLAM
-exec ros2 launch fast_lio mapping.launch.py config_file:=${CONFIG_FILE}
+ros2 launch fast_lio mapping.launch.py \
+    config_file:=${CONFIG_FILE} \
+    namespace:=$NAMESPACE
