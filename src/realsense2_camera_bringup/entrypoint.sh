@@ -10,4 +10,5 @@ if [ -f "/home/ros/ros2_ws/install/setup.bash" ]; then
 fi
 
 # Substitui o processo por ros2 launch
-exec ros2 launch realsense2_camera rs_launch.py
+exec ros2 launch realsense2_camera rs_launch.py camera_namespace:=$NAMESPACE
+
