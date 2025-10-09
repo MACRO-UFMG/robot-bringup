@@ -8,4 +8,4 @@ if [ -f "/home/ros/ros2_ws/install/setup.bash" ]; then
     source /home/ros/ros2_ws/install/setup.bash
 fi
 
-exec /home/ros/ros2_ws/install/rosaria2/lib/rosaria2/rosaria2_debug   --ros-args --params-file /home/ros/ros2_ws/src/rosaria2/config/rosaria2_params.yaml
+exec /home/ros/ros2_ws/install/rosaria2/lib/rosaria2/rosaria2_debug   --ros-args --params-file /home/ros/ros2_ws/src/rosaria2/config/rosaria2_params.yaml -r __ns:=$NAMESPACE
