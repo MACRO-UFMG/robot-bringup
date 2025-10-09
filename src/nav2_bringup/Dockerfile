@@ -10,6 +10,7 @@ WORKDIR /home/${USERNAME}/ros2_ws
 # Install FASTLIO2 + Nav2 dependencies
 RUN apt-get update && \
     apt-get install -y \
+    ros-jazzy-slam-toolbox \
         # Nav2 core + bringup
         ros-jazzy-navigation2 \
         ros-jazzy-nav2-bringup \
