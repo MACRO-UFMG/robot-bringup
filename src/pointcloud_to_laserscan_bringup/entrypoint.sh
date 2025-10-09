@@ -15,8 +15,8 @@ if [ -f "/home/${USERNAME}/ros2_ws/install/setup.bash" ]; then
 fi
 
 # Set default parameters
-INPUT_CLOUD_TOPIC=${INPUT_CLOUD_TOPIC:-"/cloud_registered"}
-OUTPUT_SCAN_TOPIC=${OUTPUT_SCAN_TOPIC:-"/scan"}
+INPUT_CLOUD_TOPIC="${NAMESPACE}/cloud_registered"
+OUTPUT_SCAN_TOPIC="${NAMESPACE}/scan"
 TARGET_FRAME=${TARGET_FRAME:-""}
 MIN_HEIGHT=${MIN_HEIGHT:-"-2.0"}
 MAX_HEIGHT=${MAX_HEIGHT:-"2.0"}
@@ -27,6 +27,7 @@ RANGE_MIN=${RANGE_MIN:-"0.1"}
 RANGE_MAX=${RANGE_MAX:-"100.0"}
 
 echo "🔄 PointCloud to LaserScan Converter Ready!"
+echo "Namespace: $NAMESPACE"
 echo "📡 Input cloud topic: ${INPUT_CLOUD_TOPIC}"
 echo "📡 Output scan topic: ${OUTPUT_SCAN_TOPIC}"
 echo "📏 Height range: [${MIN_HEIGHT}, ${MAX_HEIGHT}]"
@@ -46,4 +47,5 @@ exec ros2 run pointcloud_to_laserscan pointcloud_to_laserscan_node \
     -p angle_increment:=${ANGLE_INCREMENT} \
     -p range_min:=${RANGE_MIN} \
     -p range_max:=${RANGE_MAX} \
-    $([ -n "${TARGET_FRAME}" ] && echo "-p target_frame:=${TARGET_FRAME}" || echo "")
+    $([ -n "${TARGET_FRAME}" ] && echo "-p target_frame:=${TARGET_FRAME}")
+
