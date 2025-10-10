@@ -34,7 +34,7 @@ pad() {
 PLATFORM=$(whiptail --title "Robot Platform" --checklist \
 "Select the robotic platform:" 15 60 4 \
 "pionner" "$(pad "Pioneer robot bringup")" OFF \
-"scout"   "$(pad "Scout robot bringup (Em desenvolvimento)")" OFF \
+"scout"   "$(pad "Scout robot bringup")" OFF \
 "espeleo" "$(pad "Espeleo robot bringup (Em desenvolvimento)")" OFF \
 3>&1 1>&2 2>&3)
 

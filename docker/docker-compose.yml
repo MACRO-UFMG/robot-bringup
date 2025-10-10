@@ -38,7 +38,7 @@ services:
     env_file:
       - ../config/.env
 
-  ros_bringup:
+  robot_bringup:
     build: ../src/robot_bringup
     profiles: ["ros_base"]
     network_mode: host
