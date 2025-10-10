@@ -25,3 +25,6 @@
 [submodule "src/scout_bringup/src/ugv_sdk"]
 	path = src/scout_bringup/src/ugv_sdk
 	url = https://github.com/agilexrobotics/ugv_sdk.git
+[submodule "src/scout_bringup/src/scout-bringup"]
+	path = src/scout_bringup/src/scout-bringup
+	url = https://github.com/UFMG-Petrobras-OP-1319/scout-bringup.git
