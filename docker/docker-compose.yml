@@ -23,7 +23,7 @@ services:
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     env_file:
-      - ./bringup.env
+      - ../config/.env
 
   realsense2_camera_bringup:
     build: ../src/realsense2_camera_bringup
