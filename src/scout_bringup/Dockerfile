@@ -12,11 +12,7 @@ WORKDIR /home/ros/ros2_ws/src
 # Copia os pacotes ROS2
 COPY ./src/ugv_sdk ./ugv_sdk
 COPY ./src/scout_ros2 ./scout_ros2
-
-# List available packages for debugging
-RUN /bin/bash -c "cd /home/ros/ros2_ws && \
-    source /opt/ros/jazzy/setup.bash && \
-    colcon list --names-only"
+COPY ./src/scout-bringup/scout_bringup ./scout_bringup
 
 # Build ugv_sdk as a ROS 2 package first
 RUN /bin/bash -c "cd /home/ros/ros2_ws && \
@@ -28,6 +24,11 @@ RUN /bin/bash -c "cd /home/ros/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
     source install/setup.bash && \
     colcon build --packages-select scout_msgs scout_base scout_description --cmake-args -DCMAKE_BUILD_TYPE=Release"
+
+RUN /bin/bash -c "cd /home/ros/ros2_ws && \
+    source /opt/ros/jazzy/setup.bash && \
+    source install/setup.bash && \
+    colcon build --packages-select scout_bringup --cmake-args -DCMAKE_BUILD_TYPE=Release "
 
 # Build workspace ROS2
 WORKDIR /home/ros/ros2_ws
