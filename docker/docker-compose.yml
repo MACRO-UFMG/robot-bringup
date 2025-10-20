@@ -1,7 +1,7 @@
 services:
   pioneer_bringup:
     build: ../src/pioneer_bringup
-    profiles: ["pionner"]
+    profiles: ["pioneer"]
     network_mode: host
     command: /bin/bash
     privileged: true
@@ -122,5 +122,3 @@ services:
     environment:
       INPUT_CLOUD_TOPIC: "/cloud_registered"
       OUTPUT_SCAN_TOPIC: "/scan"
-      MIN_HEIGHT: "-2.0"
-      MAX_HEIGHT: "2.0"
