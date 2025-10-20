@@ -19,16 +19,16 @@ RUN /bin/bash -c "cd /home/ros/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
     colcon build --packages-select ugv_sdk --cmake-args -DCMAKE_BUILD_TYPE=Release"
 
-# Build Scout packages (now that ugv_sdk is available in ROS 2 workspace)
+# Build Scout packages 
 RUN /bin/bash -c "cd /home/ros/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
     source install/setup.bash && \
-    colcon build --packages-select scout_msgs scout_base scout_description --cmake-args -DCMAKE_BUILD_TYPE=Release"
+    colcon build --packages-select scout_msgs scout_description scout_bringup --cmake-args -DCMAKE_BUILD_TYPE=Release"
 
 RUN /bin/bash -c "cd /home/ros/ros2_ws && \
     source /opt/ros/jazzy/setup.bash && \
     source install/setup.bash && \
-    colcon build --packages-select scout_bringup --cmake-args -DCMAKE_BUILD_TYPE=Release "
+    colcon build --packages-select scout_base --cmake-args -DCMAKE_BUILD_TYPE=Release "
 
 # Build workspace ROS2
 WORKDIR /home/ros/ros2_ws

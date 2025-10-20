@@ -1,6 +1,6 @@
 services:
   pioneer_bringup:
-    build: ../src/pionner_bringup
+    build: ../src/pioneer_bringup
     profiles: ["pionner"]
     network_mode: host
     command: /bin/bash
@@ -52,6 +52,7 @@ services:
       - ../config/.env
 
   livox_bringup:
+    image: livox_bringup:latest
     build: 
       context: ../src/livox_bringup
       tags:
@@ -73,6 +74,7 @@ services:
       - ../config/.env
 
   fastlio2_bringup:
+    image : fastlio2_bringup:latest
     build: 
       context: ../src/fastlio2_bringup
       dockerfile: Dockerfile

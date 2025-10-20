@@ -1,9 +1,3 @@
-[submodule "src/pionner_bringup/src/AriaCoda"]
-	path = src/pionner_bringup/src/AriaCoda
-	url = https://github.com/MACRO-UFMG/AriaCoda.git
-[submodule "src/pionner_bringup/src/rosaria2"]
-	path = src/pionner_bringup/src/rosaria2
-	url = https://github.com/MACRO-UFMG/rosaria2.git
 [submodule "src/fastlio2_bringup/src/FAST_LIO_ROS2"]
 	path = src/fastlio2_bringup/src/FAST_LIO_ROS2
 	url = https://github.com/MACRO-UFMG/FAST_LIO_ROS2.git
@@ -20,8 +14,8 @@
 	branch = jazzy
 [submodule "src/scout_bringup/src/scout_ros2"]
 	path = src/scout_bringup/src/scout_ros2
-	url = https://github.com/agilexrobotics/scout_ros2.git
-	branch = origin/jazzy
+	url = https://github.com/MACRO-UFMG/scout_ros2.git
+	branch = main
 [submodule "src/scout_bringup/src/ugv_sdk"]
 	path = src/scout_bringup/src/ugv_sdk
 	url = https://github.com/agilexrobotics/ugv_sdk.git
