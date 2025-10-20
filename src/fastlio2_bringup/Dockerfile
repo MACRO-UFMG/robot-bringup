@@ -25,6 +25,7 @@ RUN apt-get update && \
 # Copy FAST_LIO_ROS2 sources into the ROS2 workspace
 WORKDIR /home/${USERNAME}/ros2_ws/src
 COPY ./src/FAST_LIO_ROS2 ./FAST_LIO_ROS2
+COPY ./src/scripts ./scripts
 
 # Build FAST_LIO_ROS2 (depends on livox_ros_driver2)
 RUN /bin/bash -c "cd /home/${USERNAME}/ros2_ws && \
