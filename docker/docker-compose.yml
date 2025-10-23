@@ -91,9 +91,22 @@ services:
     environment:
       CONFIG_FILE: "mid360_mod.yaml"
 
-  nav2_bringup:
-    build: ../src/nav2_bringup
-    profiles: ["nav2"]
+  navigation_bringup:
+    build: ../src/navigation_bringup
+    profiles: ["navigation"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  localization_bringup:
+    build: ../src/localization_bringup
+    profiles: ["localization"]
     network_mode: host
     command: /bin/bash
     privileged: true
