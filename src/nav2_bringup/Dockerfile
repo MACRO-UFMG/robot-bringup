@@ -24,13 +24,13 @@ RUN apt-get update && \
 # Copy FAST_LIO_ROS2 sources into the ROS2 workspace
 WORKDIR /home/${USERNAME}/ros2_ws
 
-RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
+
+RUN rosdep update && \
+    rosdep install --from-paths . --ignore-src -r -y
 
 COPY ./src/ ./src/
 
-# Install additional ROS2 dependencies
-RUN rosdep update && \
-    rosdep install --from-paths . --ignore-src -r -y
+RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
 
 # Copy entrypoint
 COPY ./entrypoint.sh /entrypoint.sh

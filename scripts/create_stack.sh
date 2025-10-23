@@ -33,8 +33,13 @@ pad() {
 # ----- Step 1: Choose robotic platform -----
 PLATFORM=$(whiptail --title "Robot Platform" --checklist \
 "Select the robotic platform:" 15 60 4 \
+<<<<<<< Updated upstream
 "pionner" "$(pad "Pioneer robot bringup")" OFF \
 "scout"   "$(pad "Scout robot bringup")" OFF \
+=======
+"pioneer" "$(pad "Pioneer robot bringup")" OFF \
+"scout"   "$(pad "Scout robot bringup (Em desenvolvimento)")" OFF \
+>>>>>>> Stashed changes
 "espeleo" "$(pad "Espeleo robot bringup (Em desenvolvimento)")" OFF \
 3>&1 1>&2 2>&3)
 
@@ -73,15 +78,20 @@ if [ $? -ne 0 ]; then
 fi
 
 # ----- Combine all selections -----
-# Remove quotes and join
-PROFILES=""
+# Start with ros_base as the mandatory base profile
+PROFILES="ros_base"
+
+# Append user selections
 for choice in $PLATFORM $SENSORS $PACKAGES; do
     # Clean choice: remove quotes if any
     choice=$(echo "$choice" | tr -d '"')
-    PROFILES="$PROFILES $choice"
+    # Avoid duplicates (optional but safe)
+    if [[ ! " $PROFILES " =~ " $choice " ]]; then
+        PROFILES="$PROFILES $choice"
+    fi
 done
 
-# Trim leading space
+# Trim leading/trailing whitespace
 PROFILES=$(echo $PROFILES)
 
 # Save to config file
