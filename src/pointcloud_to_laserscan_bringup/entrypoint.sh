@@ -36,16 +36,18 @@ echo "📏 Range: [${RANGE_MIN}, ${RANGE_MAX}]"
 echo ""
 
 # Launch pointcloud_to_laserscan node
-exec ros2 run pointcloud_to_laserscan pointcloud_to_laserscan_node \
-    --ros-args \
-    -r cloud_in:=${INPUT_CLOUD_TOPIC} \
-    -r scan:=${OUTPUT_SCAN_TOPIC} \
-    -p min_height:=${MIN_HEIGHT} \
-    -p max_height:=${MAX_HEIGHT} \
-    -p angle_min:=${ANGLE_MIN} \
-    -p angle_max:=${ANGLE_MAX} \
-    -p angle_increment:=${ANGLE_INCREMENT} \
-    -p range_min:=${RANGE_MIN} \
-    -p range_max:=${RANGE_MAX} \
-    $([ -n "${TARGET_FRAME}" ] && echo "-p target_frame:=${TARGET_FRAME}")
+ros2 launch pointcloud_to_laserscan sample_pointcloud_to_laserscan_launch.py
+
+# exec ros2 run pointcloud_to_laserscan pointcloud_to_laserscan_node \
+#     --ros-args \
+#     -r cloud_in:=${INPUT_CLOUD_TOPIC} \
+#     -r scan:=${OUTPUT_SCAN_TOPIC} \
+#     -p min_height:=${MIN_HEIGHT} \
+#     -p max_height:=${MAX_HEIGHT} \
+#     -p angle_min:=${ANGLE_MIN} \
+#     -p angle_max:=${ANGLE_MAX} \
+#     -p angle_increment:=${ANGLE_INCREMENT} \
+#     -p range_min:=${RANGE_MIN} \
+#     -p range_max:=${RANGE_MAX} \
+#     $([ -n "${TARGET_FRAME}" ] && echo "-p target_frame:=${TARGET_FRAME}")
 
