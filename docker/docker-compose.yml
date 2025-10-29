@@ -132,6 +132,3 @@ services:
       - "/dev:/dev"
     env_file:
       - ../config/.env
-    environment:
-      INPUT_CLOUD_TOPIC: "/cloud_registered"
-      OUTPUT_SCAN_TOPIC: "/scan"
