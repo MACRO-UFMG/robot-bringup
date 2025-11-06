@@ -16,6 +16,7 @@ if [ -z "$NAMESPACE" ]; then
 fi
 
 # Roda os dois nós dentro do mesmo namespace
-python3 /home/ros/ros2_ws/src/scripts/dynamic_livox_tf.py --ros-args -r __ns:=$NAMESPACE &
-ros2 launch espeleo_control2 test_obstacle_detection.xml
+python3 /home/ros/ros2_ws/src/scripts/dynamic_livox_tf.py --ros-args -r __ns:=$NAMESPACE
+# python3 /home/ros/ros2_ws/src/scripts/dynamic_livox_tf.py --ros-args -r __ns:=$NAMESPACE &
+# ros2 launch espeleo_control2 test_obstacle_detection.xml
 # ros2 run espeleo_control2 feedback_linearization.py --ros-args -r __ns:=$NAMESPACE -p const_vel:=$CONST_VEL -p const_omega:=$CONST_OMEGA
