@@ -33,7 +33,7 @@ pad() {
 # ----- Step 1: Choose robotic platform -----
 PLATFORM=$(whiptail --title "Robot Platform" --checklist \
 "Select the robotic platform:" 15 60 4 \
-"pionner" "$(pad "Pioneer robot bringup")" OFF \
+"pioneer" "$(pad "Pioneer robot bringup")" OFF \
 "scout"   "$(pad "Scout robot bringup")" OFF \
 "espeleo" "$(pad "Espeleo robot bringup (Em desenvolvimento)")" OFF \
 3>&1 1>&2 2>&3)
@@ -60,7 +60,8 @@ fi
 # ----- Step 3: Choose additional packages -----
 PACKAGES=$(whiptail --title "Additional Packages" --checklist \
 "Select additional packages you want to enable:" 20 60 10 \
-"nav2"         "$(pad "Navigation2 (Nav2)")" OFF \
+"localization"         "$(pad "Localization (Nav2)")" OFF \
+"navigation"         "$(pad "Navigation (Nav2)")" OFF \
 "fastlio2"     "$(pad "FAST-LIO2 Mapping")" OFF \
 "pointcloud_to_laserscan"     "$(pad "Convert point cloud to laserscan")" OFF \
 "slam"         "$(pad "SLAM (Em desenvolvimento)")" OFF \
