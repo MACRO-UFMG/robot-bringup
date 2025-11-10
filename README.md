@@ -44,8 +44,8 @@ git submodule update --init --recursive
 - `src/fastlio2_bringup/src/FAST_LIO_ROS2` - Fast LIO SLAM algorithm
 - `src/livox_bringup/src/Livox-SDK2` - Livox LiDAR SDK
 - `src/livox_bringup/src/livox_ros_driver2` - Livox ROS2 driver
-- `src/pionner_bringup/src/AriaCoda` - Pioneer robot interface
-- `src/pionner_bringup/src/rosaria2` - Pioneer ROS2 driver
+- `src/pioneer_bringup/src/AriaCoda` - Pioneer robot interface
+- `src/pioneer_bringup/src/rosaria2` - Pioneer ROS2 driver
 
 ### 3. Build Docker Images
 
@@ -87,7 +87,7 @@ cd docker
 docker-compose --profile livox up
 
 # Run Pioneer robot interface
-docker-compose --profile pionner up
+docker-compose --profile pioneer up
 
 # Run RealSense camera
 docker-compose --profile realsense2 up
@@ -108,7 +108,7 @@ You can run individual services based on your needs:
 docker-compose --profile livox up
 
 # Robot control only  
-docker-compose --profile pionner up
+docker-compose --profile pioneer up
 
 # SLAM only
 docker-compose --profile fastlio2 up
@@ -122,7 +122,7 @@ docker-compose --profile nav2 up
 | Service | Profile | Description |
 |---------|---------|-------------|
 | `livox_bringup` | `livox` | Livox MID360 LiDAR driver with RViz |
-| `pionner_bringup` | `pionner` | Pioneer robot interface |
+| `pioneer_bringup` | `pioneer` | Pioneer robot interface |
 | `realsense2_camera_bringup` | `realsense2` | RealSense camera driver |
 | `fastlio2_bringup` | `fastlio2` | FastLIO2 SLAM algorithm |
 | `nav2_bringup` | `nav2` | Nav2 navigation stack |

@@ -47,7 +47,7 @@ class TfPublisher(Node):
         t.header.stamp = self.get_clock().now().to_msg()
         t.header.frame_id = 'fast_lio/base_link'
         t.child_frame_id = 'livox_frame'
-        t.transform.translation.x = 0.2
+        t.transform.translation.x = -0.01
         t.transform.translation.y = 0.0
         t.transform.translation.z = 0.15
         t.transform.rotation.x = 0.0
