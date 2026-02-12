@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 set -e
 
 # Inherit from fastlio2_bringup entrypoint
@@ -22,6 +22,7 @@ echo "Namespace: $NAMESPACE"
 echo "📡 Input cloud topic: ${INPUT_CLOUD_TOPIC}"
 echo "📡 Output scan topic: ${OUTPUT_SCAN_TOPIC}"
 echo "📏 Height range: [${MIN_HEIGHT}, ${MAX_HEIGHT}]"
+echo "📐 Angle range: [${ANGLE_MIN}, ${ANGLE_MAX}]"
 echo "📏 Range: [${RANGE_MIN}, ${RANGE_MAX}]"
 echo ""
 
@@ -34,6 +35,10 @@ exec ros2 run pointcloud_to_laserscan pointcloud_to_laserscan_node \
     -r scan:=${OUTPUT_SCAN_TOPIC} \
     -p min_height:=${MIN_HEIGHT} \
     -p max_height:=${MAX_HEIGHT} \
+    -p angle_min:=${ANGLE_MIN} \
+    -p angle_max:=${ANGLE_MAX} \
+    -p angle_increment:=${ANGLE_INCREMENT} \
     -p range_min:=${RANGE_MIN} \
-    -p range_max:=${RANGE_MAX}
+    -p range_max:=${RANGE_MAX} \
+    $([ -n "${TARGET_FRAME}" ] && echo "-p target_frame:=${TARGET_FRAME}")
 

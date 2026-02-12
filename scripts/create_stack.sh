@@ -1,13 +1,17 @@
 #!/bin/bash
+set -e
 
 # Check if whiptail is installed
-if ! command -v whiptail &> /dev/null
-then
-    echo "⚠️  whiptail is not installed. Install it with: sudo apt-get install whiptail"
-    exit 1
+if ! command -v whiptail &> /dev/null; then
+  echo "⚠️  whiptail is not installed. Install it with: sudo apt-get install whiptail"
+  exit 1
 fi
 
-CONFIG_FILE="../config/selected_profiles.conf"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+CONFIG_FILE="${REPO_ROOT}/config/selected_profiles.conf"
+mkdir -p "$(dirname "$CONFIG_FILE")"
+
 
 export NEWT_COLORS='
 root=,black
@@ -18,81 +22,94 @@ title=brightyellow,blue
 roottext=white,black
 textbox=white,black
 button=black,cyan
-actbutton=white,red 
+actbutton=white,red
 listbox=white,black
 actlistbox=brightyellow,red
 checkbox=brightgreen,black
 actcheckbox=brightgreen,red
 '
 
-# Function to pad text for checkboxes
-pad() {
-    printf "%-41s" "$1"
-}
+pad() { printf "%-45s" "$1"; }
 
-# ----- Step 1: Choose robotic platform -----
-PLATFORM=$(whiptail --title "Robot Platform" --checklist \
-"Select the robotic platform:" 15 60 4 \
-<<<<<<< Updated upstream
-"pionner" "$(pad "Pioneer robot bringup")" OFF \
-"scout"   "$(pad "Scout robot bringup")" OFF \
-=======
->>>>>>> Stashed changes
-"espeleo" "$(pad "Espeleo robot bringup (Em desenvolvimento)")" OFF \
+# ----- Step 0: Base stack (recommended always ON) -----
+BASE=$(whiptail --title "Base Stack" --checklist \
+"Base ROS stack (recommended):" 12 70 4 \
+"ros_base" "$(pad "robot_bringup (base ROS + common deps)")" ON \
 3>&1 1>&2 2>&3)
 
 if [ $? -ne 0 ]; then
-    echo "❌ Cancelled."
-    exit 1
+  echo "❌ Cancelled."
+  exit 1
+fi
+
+# ----- Step 1: Choose robotic platform -----
+PLATFORM=$(whiptail --title "Robot Platform" --checklist \
+"Select the robotic platform:" 16 70 6 \
+"pioneer" "$(pad "Pioneer robot bringup")" OFF \
+"scout"   "$(pad "Scout robot bringup")" OFF \
+"espeleo" "$(pad "Espeleo robot bringup (WIP)")" OFF \
+3>&1 1>&2 2>&3)
+
+if [ $? -ne 0 ]; then
+  echo "❌ Cancelled."
+  exit 1
 fi
 
 # ----- Step 2: Choose sensors -----
 SENSORS=$(whiptail --title "Sensors Configuration" --checklist \
-"Select the sensors you want to enable (Space=toggle, Tab=select, Enter=confirm):" 20 60 10 \
-"realsense2" "$(pad "Realsense Camera")" OFF \
-"livox"     "$(pad "Livox LiDAR")" OFF \
-"hokuyo"    "$(pad "Hokuyo LiDAR (Em desenvolvimento)")" OFF \
-"other"     "$(pad "Other Sensors (Em desenvolvimento)")" OFF \
+"Select sensors to enable (Space=toggle, Tab=select, Enter=confirm):" 18 70 8 \
+"realsense2" "$(pad "RealSense camera bringup")" OFF \
+"livox"      "$(pad "Livox LiDAR bringup")" OFF \
+"hokuyo"     "$(pad "Hokuyo LiDAR (WIP / placeholder)")" OFF \
+"other"      "$(pad "Other sensors (WIP / placeholder)")" OFF \
 3>&1 1>&2 2>&3)
 
 if [ $? -ne 0 ]; then
-    echo "❌ Cancelled."
-    exit 1
+  echo "❌ Cancelled."
+  exit 1
 fi
 
-# ----- Step 3: Choose additional packages -----
-PACKAGES=$(whiptail --title "Additional Packages" --checklist \
-"Select additional packages you want to enable:" 20 60 10 \
-"localization"         "$(pad "Localization (Nav2)")" OFF \
-"navigation"         "$(pad "Navigation (Nav2)")" OFF \
-"fastlio2"     "$(pad "FAST-LIO2 Mapping")" OFF \
-"pointcloud_to_laserscan"     "$(pad "Convert point cloud to laserscan")" OFF \
-"slam"         "$(pad "SLAM (Em desenvolvimento)")" OFF \
-"localization" "$(pad "Localization (Em desenvolvimento) ")" OFF \
+# ----- Step 3: Choose additional bringups/packages -----
+PACKAGES=$(whiptail --title "Additional Bringups / Packages" --checklist \
+"Select additional components:" 22 70 12 \
+"localization"            "$(pad "Localization bringup")" OFF \
+"navigation"              "$(pad "Navigation bringup")" OFF \
+"polaris"                 "$(pad "Polaris (navigation + planning package)")" OFF \
+"fastlio2"                "$(pad "FAST-LIO2 bringup")" OFF \
+"pointcloud_to_laserscan" "$(pad "pointcloud_to_laserscan bringup")" OFF \
+"adaptive_filter"         "$(pad "adaptive_odom_filter bringup")" OFF \
+"slam"                    "$(pad "SLAM (WIP / placeholder)")" OFF \
 3>&1 1>&2 2>&3)
 
 if [ $? -ne 0 ]; then
-    echo "❌ Cancelled."
-    exit 1
+  echo "❌ Cancelled."
+  exit 1
 fi
 
-# ----- Combine all selections -----
-# Start with ros_base as the mandatory base profile
-PROFILES="ros_base"
+# ----- Combine selections (deduplicate + clean quotes) -----
+declare -A seen
+profiles=()
 
-# Append user selections
-for choice in $PLATFORM $SENSORS $PACKAGES; do
-    # Clean choice: remove quotes if any
-    choice=$(echo "$choice" | tr -d '"')
-    # Avoid duplicates (optional but safe)
-    if [[ ! " $PROFILES " =~ " $choice " ]]; then
-        PROFILES="$PROFILES $choice"
-    fi
+add_choice() {
+  local c="$1"
+  c="$(echo "$c" | tr -d '"')"
+  [ -z "$c" ] && return 0
+  if [ -z "${seen[$c]+x}" ]; then
+    seen["$c"]=1
+    profiles+=("$c")
+  fi
+}
+
+for choice in $BASE $PLATFORM $SENSORS $PACKAGES; do
+  add_choice "$choice"
 done
 
-# Trim leading/trailing whitespace
-PROFILES=$(echo $PROFILES)
+# Safety: ensure ros_base is included
+if [ -z "${seen[ros_base]+x}" ]; then
+  profiles=("ros_base" "${profiles[@]}")
+fi
 
-# Save to config file
-echo "$PROFILES" > "$CONFIG_FILE"
-echo "✅ Configuration saved in $CONFIG_FILE: $PROFILES"
+# Write config file (space-separated)
+echo "${profiles[*]}" > "$CONFIG_FILE"
+echo "✅ Configuration saved in $CONFIG_FILE:"
+echo "   ${profiles[*]}"

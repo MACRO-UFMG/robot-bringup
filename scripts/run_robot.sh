@@ -1,38 +1,44 @@
 #!/bin/bash
+set -e
 
-CONFIG_FILE="../config/selected_profiles.conf"
+# Resolve paths relative to this script (works from anywhere)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+CONFIG_FILE="${REPO_ROOT}/config/selected_profiles.conf"
 IMAGE_NAME="ros2_jazzy"
-ROS_DOCKERFILE_PATH="../docker/ros_jazzy/Dockerfile"
+ROS_DOCKERFILE_PATH="${REPO_ROOT}/docker/ros_jazzy/Dockerfile"
+DOCKER_CONTEXT_DIR="${REPO_ROOT}/docker"
+COMPOSE_FILE="${REPO_ROOT}/docker/docker-compose.yml"
 PROJECT_NAME="robot_bringup"
 
-# Lista de profiles padrão (usada se o arquivo de config não existir ou estiver vazio)
 DEFAULT_PROFILES="ros_base"
 
-# Verifica se a imagem Docker já existe
+# Build base image if missing
 if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
-    echo "📦 Image $IMAGE_NAME not found. Building..."
-    docker build -t "$IMAGE_NAME" -f "$ROS_DOCKERFILE_PATH" ../docker || {
-        echo "❌ Failed to build image $IMAGE_NAME"
-        exit 1
-    }
+  echo "📦 Image $IMAGE_NAME not found. Building..."
+  docker build -t "$IMAGE_NAME" -f "$ROS_DOCKERFILE_PATH" "$DOCKER_CONTEXT_DIR" || {
+    echo "❌ Failed to build image $IMAGE_NAME"
+    exit 1
+  }
 else
-    echo "✅ Image $IMAGE_NAME already exists."
+  echo "✅ Image $IMAGE_NAME already exists."
 fi
 
-# Lê os profiles do arquivo de configuração, se existir e não estiver vazio
+# Read profiles
 if [ -f "$CONFIG_FILE" ] && [ -s "$CONFIG_FILE" ]; then
-    PROFILES=$(cat "$CONFIG_FILE" | tr -d '\r\n' | tr -s ' ')
-    echo "📋 Using profiles from config file: $PROFILES"
+  PROFILES="$(tr -d '\r\n' < "$CONFIG_FILE" | tr -s ' ')"
+  echo "📋 Using profiles from config file: $PROFILES"
 else
-    echo "⚠️  No valid config file found or it's empty. Using default profiles: $DEFAULT_PROFILES"
-    PROFILES="$DEFAULT_PROFILES"
+  echo "⚠️  No valid config file found or it's empty. Using default profiles: $DEFAULT_PROFILES"
+  PROFILES="$DEFAULT_PROFILES"
 fi
 
-# Converte os profiles para a sintaxe do Docker Compose
-DOCKER_PROFILES=""
+# Compose profile args
+DOCKER_PROFILES=()
 for p in $PROFILES; do
-    DOCKER_PROFILES="$DOCKER_PROFILES --profile $p"
+  DOCKER_PROFILES+=(--profile "$p")
 done
 
 echo "🚀 Starting robot with profiles: $PROFILES"
-docker compose -f ../docker/docker-compose.yml $DOCKER_PROFILES --project-name "$PROJECT_NAME" up --build
+docker compose -f "$COMPOSE_FILE" "${DOCKER_PROFILES[@]}" --project-name "$PROJECT_NAME" up --build

@@ -31,3 +31,7 @@
 [submodule "src/polaris_bringup/src/polaris_navigation"]
 	path = src/polaris_bringup/src/polaris_navigation
 	url = https://github.com/MACRO-UFMG/polaris_navigation.git
+[submodule "src/adaptive_filter_bringup/src/adaptive_odom_filter"]
+	path = src/adaptive_filter_bringup/src/adaptive_odom_filter
+	url = https://github.com/gilmarpcjunior/adaptive_odom_filter.git
+	branch = ros2

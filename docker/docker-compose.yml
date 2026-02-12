@@ -132,3 +132,21 @@ services:
       - "/dev:/dev"
     env_file:
       - ../config/.env
+  
+  adaptive_odom_filter_bringup:
+    build: 
+      context: ../src/adaptive_filter_bringup
+      dockerfile: Dockerfile
+    profiles: ["adaptive_filter"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+    environment:
+      CONFIG_FILE: adaptive_filter_parameters.yaml
