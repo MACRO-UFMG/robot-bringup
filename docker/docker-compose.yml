@@ -64,10 +64,6 @@ services:
     tty: true
     stdin_open: true
     ipc: host
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - /dev/shm:/dev/shm
     devices:
       - "/dev:/dev"
     env_file:
@@ -132,3 +128,104 @@ services:
       - "/dev:/dev"
     env_file:
       - ../config/.env
+
+  polaris_bringup:
+    build: ../src/polaris_bringup
+    profiles: ["polaris"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  # Pan-Tilt Stream Server - Hardware accelerated decoding with L4T 36+
+  pan-tilt-stream-server:
+    profiles: ["pantilt"]
+    build:
+      context: ../src/pan_tilt_bringup
+      dockerfile: stream_server/Dockerfile
+    image: rtsp_stream_server:jetson
+    container_name: pan-tilt-rtsp-stream-server
+    restart: unless-stopped
+    network_mode: host
+    ipc: host  # Share IPC namespace with host
+    runtime: nvidia
+    shm_size: '2g'  # Allocate 2 GB of shared memory
+    env_file:
+      - ../config/.env
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - CONFIG_FILE=/app/config/cameras.json
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../src/pan_tilt_bringup/config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw  # Shared memory with read-write
+      - /tmp:/tmp:rw          # Additional shared space
+    devices:
+      - /dev/nvhost-ctrl
+      - /dev/nvhost-ctrl-gpu
+      - /dev/nvhost-prof-gpu
+      - /dev/nvmap
+      - /dev/nvhost-gpu
+      - /dev/nvhost-as-gpu
+      - /dev/nvhost-sched-gpu
+      - /dev/nvhost-tsg-gpu
+      - /dev/v4l2-nvdec
+      - /dev/nvhost-ctrl-vi0
+      - /dev/nvhost-ctrl-vi1
+      - /dev/nvhost-ctrl-isp
+      - /dev/nvhost-ctrl-nvcsi
+      - /dev/dri:/dev/dri  # GPU access for fallback decoding
+    privileged: true
+
+  # Pan-Tilt ROS Publisher
+  pan-tilt-ros-publisher:
+    profiles: ["pantilt"]
+    build:
+      context: ../src/pan_tilt_bringup
+      dockerfile: ros_publisher/Dockerfile
+    image: rtsp_ros_publisher:noetic
+    container_name: pan-tilt-rtsp-ros-publisher
+    restart: unless-stopped
+    depends_on:
+      - pan-tilt-stream-server
+    ipc: host  # Share IPC namespace with host
+    shm_size: '2g'  # Allocate shared memory for ROS
+    env_file:
+      - ../config/.env
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-7}  # ROS 2 domain ID
+      - CONFIG_FILE=/app/config/cameras.json
+      - DISPLAY=${DISPLAY:-:0}            # X11 display for GUI applications
+      - QT_X11_NO_MITSHM=1                # Disable MIT-SHM for QT apps
+      - XAUTHORITY=/tmp/.docker.xauth     # X11 authentication
+    volumes:
+      - ../src/pan_tilt_bringup/config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw              # Shared memory with read-write
+      - /tmp:/tmp:rw                      # Additional shared space
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.docker.xauth:rw  # X11 auth
+    network_mode: host
+
+  adaptive_odom_filter_bringup:
+    build: 
+      context: ../src/adaptive_filter_bringup
+      dockerfile: Dockerfile
+    profiles: ["adaptive_filter"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+    environment:
+      LAUNCH_FILE: adaptive_filter_fastlio_wheelodom.launch.py
+      CONFIG_FILE: adaptive_filter_parameters.yaml

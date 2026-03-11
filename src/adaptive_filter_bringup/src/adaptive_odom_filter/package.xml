@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>adaptive_odom_filter</name>
+  <version>0.0.1</version>
+  <description>Adaptive EKF fusing IMU, wheel odom, Fast-LIO2, and (optional) visual odometry for ROS 2.</description>
+
+  <maintainer email="gilmarpcruzjunior@gmail.com">gilmar</maintainer>
+  <license>TODO</license>
+
+  <!-- Build system -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <!-- If you install Python nodes from CMake (recommended), keep this: -->
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- Core ROS 2 client libs -->
+  <depend>rclcpp</depend>
+  <exec_depend>rclpy</exec_depend>
+
+  <!-- Messages -->
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>rtabmap_msgs</depend>
+
+  <!-- TF2 (ROS 2) -->
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+
+  <!-- Eigen (for find_package(Eigen3) via CMake) -->
+  <build_depend>eigen3_cmake_module</build_depend>
+  <build_export_depend>eigen3_cmake_module</build_export_depend>
+
+  <!-- Launch (for .launch.py files) -->
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

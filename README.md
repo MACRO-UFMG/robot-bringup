@@ -19,8 +19,8 @@ A comprehensive ROS2-based robot bringup system for autonomous navigation and ma
 - **Docker**: Latest version with Docker Compose
 - **Hardware**: 
   - Livox MID360 LiDAR sensor
-  - Pioneer robot platform
   - RealSense camera (optional)
+  - Your robot (Scout / Pioneer / Espeleo)
 
 ## 🚀 Installation
 
@@ -46,6 +46,10 @@ git submodule update --init --recursive
 - `src/livox_bringup/src/livox_ros_driver2` - Livox ROS2 driver
 - `src/pionner_bringup/src/AriaCoda` - Pioneer robot interface
 - `src/pionner_bringup/src/rosaria2` - Pioneer ROS2 driver
+- `src/scout_bringup/src/scout_ros2` - Scout ROS2 driver
+- `src/scout_bringup/src/ugv_sdk` - Scout SDK and communication library
+- `src/scout_bringup/src/scout-bringup` - Scout launch and configuration files
+
 
 ### 3. Build Docker Images
 
@@ -58,7 +62,7 @@ docker-compose build
 
 ### Environment Variables
 
-Edit `docker/bringup.env` to configure your setup:
+Edit `config/.env` to configure your setup:
 
 ```bash
 # ROS Configuration
@@ -86,8 +90,8 @@ cd docker
 # Run Livox LiDAR driver with RViz
 docker-compose --profile livox up
 
-# Run Pioneer robot interface
-docker-compose --profile pionner up
+# Run your robot interface
+docker-compose --profile pioneer / scout / espeleo up
 
 # Run RealSense camera
 docker-compose --profile realsense2 up
@@ -108,7 +112,7 @@ You can run individual services based on your needs:
 docker-compose --profile livox up
 
 # Robot control only  
-docker-compose --profile pionner up
+docker-compose --profile pioneer / scout / espeleo up
 
 # SLAM only
 docker-compose --profile fastlio2 up
@@ -123,6 +127,7 @@ docker-compose --profile nav2 up
 |---------|---------|-------------|
 | `livox_bringup` | `livox` | Livox MID360 LiDAR driver with RViz |
 | `pionner_bringup` | `pionner` | Pioneer robot interface |
+| `scout_bringup` | `scout` | Scout robot interface |
 | `realsense2_camera_bringup` | `realsense2` | RealSense camera driver |
 | `fastlio2_bringup` | `fastlio2` | FastLIO2 SLAM algorithm |
 | `nav2_bringup` | `nav2` | Nav2 navigation stack |
@@ -149,8 +154,8 @@ docker exec -it <livox_container> bash
 ros2 launch livox_ros_driver2 rviz_MID360_launch.py
 
 # Enter Pioneer container  
-docker exec -it <pioneer_container> bash
-ros2 launch rosaria2 rosaria2.launch.py
+docker exec -it <your_robot_container> bash
+ros2 launch <package> <your_launch>.launch.py
 
 # Enter FastLIO container
 docker exec -it <fastlio_container> bash

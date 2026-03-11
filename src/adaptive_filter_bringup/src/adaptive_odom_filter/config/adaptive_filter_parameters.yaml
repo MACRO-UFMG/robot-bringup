@@ -1,0 +1,38 @@
+# config/adaptive_filter_parameters.yaml
+adaptive_odom_filter:
+  ros__parameters:
+    enableFilter: true
+    enableImu: true
+    enableWheel: true
+    enableLidar: true
+    enableVisual: false
+    filterFreq: "w"
+    freq: 200.0
+
+    # input filter
+    alpha_lidar: 0.99
+    alpha_visual: 0.999
+
+    # gains
+    lidarG: 0.0001
+    wheelG: 10.0
+    visualG: 0.0
+    imuG: 1000.0
+
+    # Wheel odometry covariance adaptive positive constants
+    gamma_vx: 0.001        
+    gamma_omegaz: 100.0    
+    delta_vx: 0.0001      
+    delta_omegaz: 0.001   
+
+    # visual odometry covariance
+    minIntensity: 0.0
+    maxIntensity: 1.0
+
+    # type of adaptive function
+    lidar_type_func: 2          # 0: linear; 1: exponential; 2: original message
+    visual_type_func: 2         # 0: linear; 1: exponential; 2: original message
+    wheel_type_func: 0          # 0: our function; 1: original message
+
+    # type of cameras
+    camera_type: 1              # 1: tracking; 2: depth
