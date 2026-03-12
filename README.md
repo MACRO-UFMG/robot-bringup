@@ -51,6 +51,58 @@ git submodule update --init --recursive
 - `src/scout_bringup/src/scout-bringup` - Scout launch and configuration files
 
 
+**Troubleshooting: Empty Submodule Folders**
+
+When cloning the repository and running the submodule initialization command (`git submodule update --init --recursive`), you might encounter a situation where some package folders appear completely empty (containing only the `.git` file).
+
+**How to solve**
+
+#### 1. Identify and fix the "culprit" submodule
+Check the terminal output from the `git submodule update` command. The last printed fatal error will indicate which submodule crashed the process. 
+
+Usually, the fix involves entering the broken submodule folder, pulling a valid reference, and updating the main repository:
+
+```bash
+# Enter the broken submodule
+cd src/path/to/broken_submodule
+
+# Fetch the latest info and checkout the correct branch (e.g., main or master)
+git fetch
+git checkout main
+git pull origin main
+
+# Go back to the workspace root and update the reference in the parent repository
+cd ~/robot-bringup
+git add src/path/to/broken_submodule
+git commit -m "fix: update submodule reference"
+```
+#### 2. Resume initialization
+
+With the main error fixed, run the command again. It should now bypass the corrected package and populate the folders that were previously empty:
+```bash
+
+git submodule update --init --recursive
+```
+#### 3. Forcing restoration (If the folder remains empty)
+
+If the main repository is already pointing to the correct commit (check with git submodule status), but the local folder is still empty due to a synchronization failure, you can force Git to physically restore the files:
+```bash
+
+# Enter the empty submodule folder
+cd src/path/to/empty_package
+
+# Fetch information from the remote
+git fetch
+
+# Force restoration to the specific branch or commit required by the parent repository
+git reset --hard origin/master 
+# or
+git reset --hard <commit-hash>
+```
+
+After the reset --hard, the package files (such as CMakeLists.txt and package.xml) should appear in the folder.
+
+
 ### 3. Build Docker Images
 
 ```bash
