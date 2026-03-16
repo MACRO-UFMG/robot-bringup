@@ -1,33 +1,33 @@
 [submodule "src/pioneer_bringup/src/AriaCoda"]
 	path = src/pioneer_bringup/src/AriaCoda
-	url = https://github.com/MACRO-UFMG/AriaCoda.git
+	url = git@github.com:MACRO-UFMG/AriaCoda.git
 [submodule "src/pioneer_bringup/src/rosaria2"]
 	path = src/pioneer_bringup/src/rosaria2
-	url = https://github.com/MACRO-UFMG/rosaria2.git
+	url = git@github.com:MACRO-UFMG/rosaria2.git
 [submodule "src/fastlio2_bringup/src/FAST_LIO_ROS2"]
 	path = src/fastlio2_bringup/src/FAST_LIO_ROS2
-	url = https://github.com/MACRO-UFMG/FAST_LIO_ROS2.git
+	url = git@github.com:MACRO-UFMG/FAST_LIO_ROS2.git
 [submodule "src/livox_bringup/src/livox_ros_driver2"]
 	path = src/livox_bringup/src/livox_ros_driver2
-	url = https://github.com/UFMG-Petrobras-OP-1319/livox_ros_driver2.git
+	url = git@github.com:UFMG-Petrobras-OP-1319/livox_ros_driver2.git
 	branch = jazzy
 [submodule "src/livox_bringup/src/Livox-SDK2"]
 	path = src/livox_bringup/src/Livox-SDK2
-	url = https://github.com/UFMG-Petrobras-OP-1319/Livox-SDK2.git
+	url = git@github.com:UFMG-Petrobras-OP-1319/Livox-SDK2.git
 [submodule "src/pointcloud_to_laserscan_bringup/src/pointcloud_to_laserscan"]
 	path = src/pointcloud_to_laserscan_bringup/src/pointcloud_to_laserscan
-	url = https://github.com/MACRO-UFMG/pointcloud_to_laserscan.git
+	url = git@github.com:MACRO-UFMG/pointcloud_to_laserscan.git
 	branch = jazzy
 [submodule "src/scout_bringup/src/scout_ros2"]
 	path = src/scout_bringup/src/scout_ros2
-	url = https://github.com/MACRO-UFMG/scout_ros2.git
+	url = git@github.com:MACRO-UFMG/scout_ros2.git
 	branch = main
 [submodule "src/scout_bringup/src/ugv_sdk"]
 	path = src/scout_bringup/src/ugv_sdk
-	url = https://github.com/agilexrobotics/ugv_sdk.git
+	url = git@github.com:agilexrobotics/ugv_sdk.git
 [submodule "src/scout_bringup/src/scout-bringup"]
 	path = src/scout_bringup/src/scout-bringup
-	url = https://github.com/UFMG-Petrobras-OP-1319/scout-bringup.git
+	url = git@github.com:UFMG-Petrobras-OP-1319/scout-bringup.git
 [submodule "src/polaris_bringup/src/polaris_navigation"]
 	path = src/polaris_bringup/src/polaris_navigation
-	url = https://github.com/MACRO-UFMG/polaris_navigation.git
+	url = git@github.com:MACRO-UFMG/polaris_navigation.git
