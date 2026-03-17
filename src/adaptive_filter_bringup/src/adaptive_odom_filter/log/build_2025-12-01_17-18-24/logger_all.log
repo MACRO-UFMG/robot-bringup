@@ -1,0 +1,78 @@
+[4.455s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[4.455s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x722a43c98c80>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x722a43dc4a10>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x722a43dc4a10>>, mixin_verb=('build',))
+[4.921s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[4.922s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[4.922s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[4.922s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[4.922s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[4.922s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[4.922s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter'
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[4.922s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[4.923s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[5.133s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'adaptive_odom_filter'
+[5.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[5.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[5.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[5.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[5.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[5.425s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[5.426s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[5.582s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 315 installed packages in /opt/ros/jazzy
+[5.595s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_args' from command line to 'None'
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_target' from command line to 'None'
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_clean_cache' from command line to 'False'
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_clean_first' from command line to 'False'
+[5.771s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'cmake_force_configure' from command line to 'False'
+[5.772s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'ament_cmake_args' from command line to 'None'
+[5.772s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'catkin_cmake_args' from command line to 'None'
+[5.772s] Level 5:colcon.colcon_core.verb:set package 'adaptive_odom_filter' build argument 'catkin_skip_building_tests' from command line to 'False'
+[5.772s] DEBUG:colcon.colcon_core.verb:Building package 'adaptive_odom_filter' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/build/adaptive_odom_filter', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter', 'merge_install': False, 'path': '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter', 'symlink_install': False, 'test_result_base': None}
+[5.772s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[5.773s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[5.774s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter' with build type 'ament_cmake'
+[5.774s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter'
+[5.798s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[5.799s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[5.799s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[5.833s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/build/adaptive_odom_filter': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter -DCMAKE_INSTALL_PREFIX=/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter
+[14.069s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/build/adaptive_odom_filter' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter -DCMAKE_INSTALL_PREFIX=/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter
+[14.089s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adaptive_odom_filter)
+[14.153s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter' for CMake module files
+[14.154s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter' for CMake config files
+[14.154s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/bin'
+[14.155s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/lib/pkgconfig/adaptive_odom_filter.pc'
+[14.155s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/lib/python3.12/site-packages'
+[14.155s] Level 1:colcon.colcon_core.environment:checking '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/bin'
+[14.156s] INFO:colcon.colcon_core.shell:Creating package script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/adaptive_odom_filter/package.ps1'
+[14.178s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/adaptive_odom_filter/package.dsv'
+[14.192s] INFO:colcon.colcon_core.shell:Creating package script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/adaptive_odom_filter/package.sh'
+[14.197s] INFO:colcon.colcon_core.shell:Creating package script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/adaptive_odom_filter/package.bash'
+[14.208s] INFO:colcon.colcon_core.shell:Creating package script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/adaptive_odom_filter/package.zsh'
+[14.220s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/adaptive_odom_filter/share/colcon-core/packages/adaptive_odom_filter)
+[14.231s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[14.231s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[14.231s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '1'
+[14.231s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[14.305s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[14.305s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[14.305s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[14.372s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[14.373s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/local_setup.ps1'
+[14.375s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/_local_setup_util_ps1.py'
+[14.377s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/setup.ps1'
+[14.379s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/local_setup.sh'
+[14.380s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/_local_setup_util_sh.py'
+[14.380s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/setup.sh'
+[14.382s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/local_setup.bash'
+[14.383s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/setup.bash'
+[14.385s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/local_setup.zsh'
+[14.398s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/gilmar/Documents/scout-mini/scout_ws/src/adaptive_odom_filter/install/setup.zsh'

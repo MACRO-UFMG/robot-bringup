@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- RTSP Camera System - Complete Solution with roscore -->
+  
+  <!-- Launch Arguments -->
+  <arg name="config_file" default="/app/config/cameras.json" />
+  <arg name="jpeg_quality" default="80" />
+  <arg name="publish_raw" default="true" />
+  <arg name="publish_compressed" default="true" />
+  <arg name="publish_theora" default="false" />
+  <arg name="launch_rviz" default="false" />
+  <arg name="streamer_only" default="false" />
+  <arg name="publisher_only" default="true" />
+  
+  <!-- Enhanced ROS Publisher Node - Only publisher in this container -->
+  <group unless="$(arg streamer_only)">
+    <node name="rtsp_publisher" pkg="rtsp_cam" type="rtsp_publisher_node.py" output="screen">
+      <param name="config_file" value="$(arg config_file)" />
+      <param name="jpeg_quality" value="$(arg jpeg_quality)" />
+      <param name="publish_raw" value="$(arg publish_raw)" />
+      <param name="publish_compressed" value="$(arg publish_compressed)" />
+    </node>
+  </group>
+  
+  <!-- Image Transport Republisher for Theora (enabled by default) -->
+  <group if="$(arg publish_theora)">
+    <group unless="$(arg streamer_only)">
+      <!-- Camera 1 Theora -->
+      <node name="theora_republisher_camera1_main" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera1_main/image_raw theora out:=/camera/camera1_main/image_raw" />
+      
+      <node name="theora_republisher_camera1_sub" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera1_sub/image_raw theora out:=/camera/camera1_sub/image_raw" />
+      
+      <!-- Camera 2 Theora -->
+      <node name="theora_republisher_camera2_main" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera2_main/image_raw theora out:=/camera/camera2_main/image_raw" />
+      
+      <node name="theora_republisher_camera2_sub" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera2_sub/image_raw theora out:=/camera/camera2_sub/image_raw" />
+    </group>
+  </group>
+  
+  <!-- Static Transform Publisher for Camera Frames -->
+  <!-- Camera 1 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera1_main_tf"
+        args="0 0 0 0 0 0 base_link camera1_main_optical_frame" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera1_sub_tf"
+        args="0 0 0 0 0 0 base_link camera1_sub_optical_frame" />
+  
+  <!-- Camera 2 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera2_main_tf"
+        args="1 0 0 0 0 0 base_link camera2_main_optical_frame" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera2_sub_tf"
+        args="1 0 0 0 0 0 base_link camera2_sub_optical_frame" />
+  
+  <!-- Launch RViz with camera configuration (enabled by default) -->
+  <group if="$(arg launch_rviz)">
+    <group unless="$(arg streamer_only)">
+      <node name="rviz" pkg="rviz" type="rviz" output="screen" 
+            args="-d $(find rtsp_camera_streamer)/config/camera_display.rviz" />
+    </group>
+  </group>
+  
+</launch>

@@ -1,0 +1,65 @@
+services:
+  # Stream Server - Hardware accelerated decoding with L4T 36+
+  stream-server:
+    build:
+      context: .
+      dockerfile: stream_server/Dockerfile
+    image: rtsp_stream_server:jetson
+    container_name: rtsp_stream_server
+    restart: unless-stopped
+    network_mode: host
+    ipc: host  # Share IPC namespace with host
+    runtime: nvidia
+    shm_size: '2g' # Allocate 4 GB of shared memory
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - CONFIG_FILE=/app/config/cameras.json
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw  # Shared memory with read-write
+      - /tmp:/tmp:rw  # Additional shared space
+    devices:
+      - /dev/nvhost-ctrl
+      - /dev/nvhost-ctrl-gpu
+      - /dev/nvhost-prof-gpu
+      - /dev/nvmap
+      - /dev/nvhost-gpu
+      - /dev/nvhost-as-gpu
+      - /dev/nvhost-sched-gpu
+      - /dev/nvhost-tsg-gpu
+      - /dev/v4l2-nvdec
+      - /dev/nvhost-ctrl-vi0
+      - /dev/nvhost-ctrl-vi1
+      - /dev/nvhost-ctrl-isp
+      - /dev/nvhost-ctrl-nvcsi
+      - /dev/dri:/dev/dri  # GPU access for fallback decoding
+    privileged: true
+
+  ros-publisher:
+    build:
+      context: .
+      dockerfile: ros_publisher/Dockerfile
+    image: rtsp_ros_publisher:noetic
+    container_name: rtsp_ros_publisher
+    restart: unless-stopped
+    depends_on:
+      - stream-server
+    ipc: host  # Share IPC namespace with host
+    shm_size: '2g'  # Allocate shared memory for ROS
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-7}  # ROS 2 domain ID
+      - CONFIG_FILE=/app/config/cameras.json
+      - DISPLAY=${DISPLAY:-:0}  # X11 display for GUI applications
+      - QT_X11_NO_MITSHM=1     # Disable MIT-SHM for QT apps
+      - XAUTHORITY=/tmp/.docker.xauth  # X11 authentication
+    volumes:
+      - ./config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw  # Shared memory with read-write
+      - /tmp:/tmp:rw  # Additional shared space
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.docker.xauth:rw  # X11 auth
+    network_mode: host
+    # devices:
+      # - /dev/dri:/dev/dri  # GPU access for hardware acceleration

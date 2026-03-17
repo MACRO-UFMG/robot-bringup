@@ -1,0 +1,22 @@
+{
+  "cameras": [
+    {
+      "name": "camera1",
+      "description": "First RTSP camera",
+      "host": "192.168.10.18",
+      "port": 554,
+      "username": "admin",
+      "password": "admin",
+      "channels": [
+        {
+          "name": "main",
+          "stream_path": "/h264/ch1/main/av_stream",
+          "width": 1920,
+          "height": 1080,
+          "encoding": "h264",
+          "fps": 30
+        }
+      ]
+    }
+  ]
+}

@@ -1,94 +1,231 @@
 services:
-  # Scout Mini ROS 2 Jazzy service for Jetson Orin
-  scout-mini:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    image: scout-mini-ros2:latest
-    container_name: scout-mini-jetson
-    environment:
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-      - XAUTHORITY=/tmp/.docker.xauth
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - __NV_PRIME_RENDER_OFFLOAD=1
-      - __GLX_VENDOR_LIBRARY_NAME=nvidia
-      # ROS 2 configuration
-      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
-      - ROS_LOCALHOST_ONLY=0
-      # Fix FastRTPS shared memory issues in Docker
-      - FASTRTPS_DEFAULT_PROFILES_FILE=/dev/null
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - ../:/workspace:rw
-      # Add shared memory for better performance
-      - /dev/shm:/dev/shm
+  pioneer_bringup:
+    build: ../src/pioneer_bringup
+    profiles: ["pioneer"]
     network_mode: host
-    stdin_open: true
-    tty: true
-    privileged: true
-    runtime: nvidia
-    # Add IPC for shared memory
-    ipc: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    working_dir: /workspace
     command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    env_file:
+      - ../config/.env
 
-  # Scout Launch Service - Automatically starts scout-bringup
-  scout-launch:
-    image: scout-mini-ros2:latest
-    container_name: scout-launch-service
-    depends_on:
-      - scout-mini
+  scout_bringup:
+    build: ../src/scout_bringup
+    profiles: ["scout"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    env_file:
+      - ../config/.env
+
+  realsense2_camera_bringup:
+    build: ../src/realsense2_camera_bringup
+    profiles: ["realsense2"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  robot_bringup:
+    build: ../src/robot_bringup
+    profiles: ["ros_base"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  livox_bringup:
+    image: livox_bringup:latest
+    build: 
+      context: ../src/livox_bringup
+      tags:
+        - livox_bringup:latest
+    profiles: ["livox"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  fastlio2_bringup:
+    image : fastlio2_bringup:latest
+    build: 
+      context: ../src/fastlio2_bringup
+      dockerfile: Dockerfile
+    profiles: ["fastlio2"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
     environment:
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-      - XAUTHORITY=/tmp/.docker.xauth
+      CONFIG_FILE: "mid360_mod.yaml"
+
+  navigation_bringup:
+    build: ../src/navigation_bringup
+    profiles: ["navigation"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  localization_bringup:
+    build: ../src/localization_bringup
+    profiles: ["localization"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  pointcloud_to_laserscan_bringup:
+    build: 
+      context: ../src/pointcloud_to_laserscan_bringup
+      dockerfile: Dockerfile
+    profiles: ["pointcloud_to_laserscan", "fastlio2"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  polaris_bringup:
+    build: ../src/polaris_bringup
+    profiles: ["polaris"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    ipc: host
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+
+  # Pan-Tilt Stream Server - Hardware accelerated decoding with L4T 36+
+  pan-tilt-stream-server:
+    profiles: ["pantilt"]
+    build:
+      context: ../src/pan_tilt_bringup
+      dockerfile: stream_server/Dockerfile
+    image: rtsp_stream_server:jetson
+    container_name: pan-tilt-rtsp-stream-server
+    restart: unless-stopped
+    network_mode: host
+    ipc: host  # Share IPC namespace with host
+    runtime: nvidia
+    shm_size: '2g'  # Allocate 2 GB of shared memory
+    env_file:
+      - ../config/.env
+    environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - __NV_PRIME_RENDER_OFFLOAD=1
-      - __GLX_VENDOR_LIBRARY_NAME=nvidia
-      # ROS 2 configuration
-      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
-      - ROS_LOCALHOST_ONLY=0
-      # Fix FastRTPS shared memory issues in Docker
-      - FASTRTPS_DEFAULT_PROFILES_FILE=/dev/null
+      - CONFIG_FILE=/app/config/cameras.json
+      - PYTHONUNBUFFERED=1
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - ../:/workspace:rw
-      # Add shared memory for better performance
-      - /dev/shm:/dev/shm
-    network_mode: host
-    stdin_open: true
-    tty: true
+      - ../src/pan_tilt_bringup/config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw  # Shared memory with read-write
+      - /tmp:/tmp:rw          # Additional shared space
+    devices:
+      - /dev/nvhost-ctrl
+      - /dev/nvhost-ctrl-gpu
+      - /dev/nvhost-prof-gpu
+      - /dev/nvmap
+      - /dev/nvhost-gpu
+      - /dev/nvhost-as-gpu
+      - /dev/nvhost-sched-gpu
+      - /dev/nvhost-tsg-gpu
+      - /dev/v4l2-nvdec
+      - /dev/nvhost-ctrl-vi0
+      - /dev/nvhost-ctrl-vi1
+      - /dev/nvhost-ctrl-isp
+      - /dev/nvhost-ctrl-nvcsi
+      - /dev/dri:/dev/dri  # GPU access for fallback decoding
     privileged: true
-    runtime: nvidia
-    # Add IPC for shared memory
+
+  # Pan-Tilt ROS Publisher
+  pan-tilt-ros-publisher:
+    profiles: ["pantilt"]
+    build:
+      context: ../src/pan_tilt_bringup
+      dockerfile: ros_publisher/Dockerfile
+    image: rtsp_ros_publisher:noetic
+    container_name: pan-tilt-rtsp-ros-publisher
+    restart: unless-stopped
+    depends_on:
+      - pan-tilt-stream-server
+    ipc: host  # Share IPC namespace with host
+    shm_size: '2g'  # Allocate shared memory for ROS
+    env_file:
+      - ../config/.env
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-7}  # ROS 2 domain ID
+      - CONFIG_FILE=/app/config/cameras.json
+      - DISPLAY=${DISPLAY:-:0}            # X11 display for GUI applications
+      - QT_X11_NO_MITSHM=1                # Disable MIT-SHM for QT apps
+      - XAUTHORITY=/tmp/.docker.xauth     # X11 authentication
+    volumes:
+      - ../src/pan_tilt_bringup/config/cameras.json:/app/config/cameras.json:ro
+      - /dev/shm:/dev/shm:rw              # Shared memory with read-write
+      - /tmp:/tmp:rw                      # Additional shared space
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.docker.xauth:rw  # X11 auth
+    network_mode: host
+
+  adaptive_odom_filter_bringup:
+    build: 
+      context: ../src/adaptive_filter_bringup
+      dockerfile: Dockerfile
+    profiles: ["adaptive_filter"]
+    network_mode: host
+    command: /bin/bash
+    privileged: true
+    tty: true
+    stdin_open: true
     ipc: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    working_dir: /workspace
-    command: >
-      bash -c "
-        echo 'Setting up CAN interface...' &&
-        sudo ip link set can0 down 2>/dev/null || true &&
-        sudo ip link set can0 up type can bitrate 500000 2>/dev/null || echo 'CAN setup may require host privileges' &&
-        cd /workspace/scout_ws &&
-        source /opt/ros/jazzy/setup.bash &&
-        source install/setup.bash &&
-        ros2 launch scout_bringup start_scout.launch.py
-      "
+    devices:
+      - "/dev:/dev"
+    env_file:
+      - ../config/.env
+    environment:
+      LAUNCH_FILE: adaptive_filter_fastlio_wheelodom.launch.py
+      CONFIG_FILE: adaptive_filter_parameters.yaml

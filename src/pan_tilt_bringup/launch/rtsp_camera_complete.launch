@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- RTSP Camera System - Complete Solution -->
+  
+  <!-- Launch Arguments -->
+  <arg name="config_file" default="$(find rtsp_camera_streamer)/config/cameras.json" />
+  <arg name="jpeg_quality" default="80" />
+  <arg name="publish_raw" default="true" />
+  <arg name="publish_compressed" default="true" />
+  <arg name="publish_theora" default="true" />
+  <arg name="launch_rviz" default="true" />
+  <arg name="streamer_only" default="false" />
+  <arg name="publisher_only" default="false" />
+  
+  <!-- Stream Server Node (Hardware Accelerated) - Skip if publisher_only -->
+  <group unless="$(arg publisher_only)">
+    <node name="rtsp_streamer" pkg="rtsp_camera_streamer" type="rtsp_streamer_node.py" output="screen">
+      <param name="config_file" value="$(arg config_file)" />
+    </node>
+  </group>
+  
+  <!-- Enhanced ROS Publisher Node - Skip if streamer_only -->
+  <group unless="$(arg streamer_only)">
+    <node name="rtsp_publisher" pkg="rtsp_camera_streamer" type="rtsp_publisher_node.py" output="screen">
+      <param name="config_file" value="$(arg config_file)" />
+      <param name="jpeg_quality" value="$(arg jpeg_quality)" />
+      <param name="publish_raw" value="$(arg publish_raw)" />
+      <param name="publish_compressed" value="$(arg publish_compressed)" />
+    </node>
+  </group>
+  
+  <!-- Image Transport Republisher for Theora (enabled by default) -->
+  <group if="$(arg publish_theora)">
+    <group unless="$(arg streamer_only)">
+      <node name="theora_republisher_main" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera1_main/image_raw theora out:=/camera/camera1_main/image_raw" />
+      
+      <node name="theora_republisher_sub" pkg="image_transport" type="republish" output="screen"
+            args="compressed in:=/camera/camera1_sub/image_raw theora out:=/camera/camera1_sub/image_raw" />
+    </group>
+  </group>
+  
+  <!-- Static Transform Publisher for Camera Frames -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera1_main_tf"
+        args="0 0 0 0 0 0 base_link camera1_main_optical_frame" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera1_sub_tf"
+        args="0 0 0 0 0 0 base_link camera1_sub_optical_frame" />
+  
+  <!-- Launch RViz with camera configuration (enabled by default) -->
+  <group if="$(arg launch_rviz)">
+    <group unless="$(arg streamer_only)">
+      <node name="rviz" pkg="rviz" type="rviz" output="screen" 
+            args="-d $(find rtsp_camera_streamer)/config/camera_display.rviz" />
+    </group>
+  </group>
+  
+  <!-- Info Messages -->
+  <node name="launch_info" pkg="rospy_tutorials" type="talker" output="screen" if="false">
+    <remap from="chatter" to="launch_info" />
+  </node>
+</launch>
